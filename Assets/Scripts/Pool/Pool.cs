@@ -4,9 +4,10 @@ using UnityEngine;
 
 namespace Pool
 {
-    public class Pool : MonoBehaviour
+    public abstract class Pool : MonoBehaviour
     {
         [SerializeField] private PoolSettingsScriptableObject poolSettings;
+        [SerializeField] private Transform containerTransform;
         
         private Queue<GameObject> itemPoolQueue;
 
@@ -18,6 +19,8 @@ namespace Pool
             var objectSpawnedTransform = objectSpawned.transform;
             objectSpawnedTransform.position = position;
             objectSpawnedTransform.rotation = rotation;
+            
+            objectSpawnedTransform.SetParent(containerTransform);
 
             itemPoolQueue.Enqueue(objectSpawned);
             

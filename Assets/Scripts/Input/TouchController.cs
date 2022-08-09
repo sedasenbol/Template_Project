@@ -6,9 +6,10 @@ using UnityEngine.EventSystems;
 
 namespace Input
 {
-    public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler
+    public class TouchController : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDownHandler
     {
         public static event Action<Vector3> OnPlayerDragged;
+        public static event Action<Vector3> OnPlayerTapped;
 
         private UnityEngine.Camera mainCam;
         private Vector3 lastDragWorldPosition;
@@ -75,6 +76,15 @@ namespace Input
             LevelManager.OnNewLevelLoaded -= OnNewLevelLoaded;
             LevelManager.OnLevelCompleted -= OnLevelEnded;
             LevelManager.OnLevelFailed -= OnLevelEnded;
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (!isGameActive) {return;}
+
+            var currentTapPosition = eventData.pointerCurrentRaycast.worldPosition;
+            
+            OnPlayerTapped?.Invoke(currentTapPosition);
         }
     }
 }

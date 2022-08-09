@@ -1,6 +1,5 @@
 using System;
 using GameCore;
-using Player;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,19 +32,12 @@ namespace UI
             nextLevelText.text = (currentLevelIndex + 2).ToString("F0");
         }
 
-        private void OnBallProgressed(int ballProgressPercentage)
-        {
-            progressSlider.value = ballProgressPercentage;
-        }
-
         public void ShowFailScreen()
         {
             pauseButton.SetActive(false);
             resumeButton.SetActive(false);
             gameOverPanel.SetActive(true);
             bestScoreTMPText.gameObject.SetActive(false);
-
-            completedTMPText.text = $"%{BallProgressTracker.Instance.BallProgressPercentage} completed";
         }
 
         public void ShowSuccessScreen()
@@ -110,13 +102,6 @@ namespace UI
             scoreTMPText.gameObject.SetActive(true);
             bestScoreTMPText.gameObject.SetActive(true);
             progressSlider.value = 0f;
-
-            BallProgressTracker.OnBallProgressed += OnBallProgressed;
-        }
-
-        private void OnDisable()
-        {
-            BallProgressTracker.OnBallProgressed -= OnBallProgressed;
         }
     }
 }

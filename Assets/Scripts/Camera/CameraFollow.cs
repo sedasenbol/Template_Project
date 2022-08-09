@@ -11,36 +11,33 @@ namespace Camera
         [SerializeField] private CameraSettingsScriptableObject cameraSettings;
 
         private Transform myTransform;
-        private Transform ballTransform;
+        private Transform targetTransform;
         private Vector3 offset;
 
-        private bool shouldFollowPlayer;
+        private bool shouldFollowTarget;
         
         private void OnNewLevelLoaded()
         {
             myTransform.position = cameraSettings.CameraStartPosition;
-            ballTransform = FindObjectOfType<Ball>().transform;
-        }
-
-        private void OnBallsFirstHit()
-        {
-            shouldFollowPlayer = true;
+            targetTransform = FindObjectOfType<TemplatePlayer>().transform;
             
-            offset = myTransform.position - ballTransform.position;
+            shouldFollowTarget = true;
+            
+            offset = myTransform.position - targetTransform.position;
         }
 
         private void OnLevelEnded()
         {
-            shouldFollowPlayer = false;
+            shouldFollowTarget = false;
 
-            ballTransform = null;
+            targetTransform = null;
         }
 
         private void LateUpdate()
         {
-            if (!shouldFollowPlayer) {return;}
+            if (!shouldFollowTarget) {return;}
 
-            var targetPosition = ballTransform.position + offset;
+            var targetPosition = targetTransform.position + offset;
             var myPosition = myTransform.position;
             
             if (targetPosition.y + cameraSettings.CameraMovementThreshold > myPosition.y) {return;}
@@ -55,8 +52,6 @@ namespace Camera
             LevelManager.OnNewLevelLoaded += OnNewLevelLoaded;
             LevelManager.OnLevelFailed += OnLevelEnded;
             LevelManager.OnLevelCompleted += OnLevelEnded;
-
-            Ball.OnBallsFirstHit += OnBallsFirstHit;
         }
 
         private void OnDisable()
@@ -66,8 +61,6 @@ namespace Camera
             LevelManager.OnNewLevelLoaded -= OnNewLevelLoaded;
             LevelManager.OnLevelFailed -= OnLevelEnded;
             LevelManager.OnLevelCompleted -= OnLevelEnded;
-            
-            Ball.OnBallsFirstHit -= OnBallsFirstHit;
         }
     }
 }

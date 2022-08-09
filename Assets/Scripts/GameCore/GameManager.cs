@@ -10,7 +10,7 @@ namespace GameCore
 {
     public class GameManager : Singleton<GameManager>
     {
-        private const int TWEENERS_CAPACITY = 500;
+        private const int TWEEN_CAPACITY = 500;
 
         private readonly GameInfo gameInfo = new GameInfo();
 
@@ -25,7 +25,7 @@ namespace GameCore
             UIManager.Instance.Initialize(gameInfo.BestScore, gameInfo.CurrentLevelIndex);
             ScoreManager.Instance.Initialize(gameInfo.BestScore);
             
-            DOTween.SetTweensCapacity(TWEENERS_CAPACITY, 0);
+            DOTween.SetTweensCapacity(TWEEN_CAPACITY, 0);
             
             LoadGameScene();
         }
